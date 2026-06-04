@@ -1,28 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="light">
 <head>
-    <title>AI Autofill App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Autofill — Smart Form Filler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>AI Autofill Application</h1>
+<!-- ── Notification Banner ───────────────────────────────────────────────── -->
+<div id="notification-banner" role="alert" aria-live="polite"></div>
 
-    <textarea id="userText" placeholder="Paste your details here..."></textarea>
+<!-- ── Page Shell ────────────────────────────────────────────────────────── -->
+<div class="page">
 
-    <button onclick="extractData()">Autofill</button>
+    <!-- ── Header ────────────────────────────────────────────────────────── -->
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <div>
+                <span class="brand-name">AutoFill<span class="brand-accent">AI</span></span>
+                <span class="brand-tag">Smart Form Assistant</span>
+            </div>
+        </div>
 
-    <div class="form">
-        <input type="text" id="name" placeholder="Name">
-        <input type="email" id="email" placeholder="Email">
-        <input type="text" id="phone" placeholder="Phone">
-        <input type="text" id="location" placeholder="Location">
-        <button onclick="saveData()">Save</button>
-    </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode" onclick="toggleTheme()">
+            <span class="theme-icon theme-icon--light">☀</span>
+            <span class="theme-icon theme-icon--dark">☽</span>
+        </button>
+    </header>
+
+    <!-- ── Main Layout ────────────────────────────────────────────────────── -->
+    <main class="app-main">
+
+        <!-- LEFT: Input Panel -->
+        <section class="panel panel--input" aria-label="Paste your text">
+            <div class="panel-header">
+                <h2 class="panel-title">Paste Raw Text</h2>
+                <p class="panel-sub">Drop any bio, resume snippet, or contact block</p>
+            </div>
+
+            <textarea
+                id="userText"
+                spellcheck="false"
+                placeholder="e.g.  Jane Smith | jane@example.com | +91 9876543210&#10;New York · linkedin.com/in/janesmith · github.com/janesmith&#10;Senior Engineer at Stripe · Graduated from IIT Delhi&#10;Skills: Python, React, AWS, Docker&#10;DOB: 15 August 1992"
+            ></textarea>
+
+            <div class="action-row">
+                <button id="autofill-btn" class="btn btn--primary" onclick="extractData()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    <span class="btn-label">Autofill Fields</span>
+                </button>
+                <div id="loading-spinner" class="spinner" style="display:none;" role="status" aria-label="Extracting…"></div>
+            </div>
+
+            <!-- Extraction status summary shown after a successful call -->
+            <div id="extraction-summary" class="extraction-summary" style="display:none;" aria-live="polite"></div>
+        </section>
+
+        <!-- RIGHT: Form Panel -->
+        <section class="panel panel--form" aria-label="Extracted form fields">
+            <div class="panel-header">
+                <h2 class="panel-title">Extracted Fields</h2>
+                <p class="panel-sub">Review, edit, then save</p>
+            </div>
+
+            <form id="main-form" onsubmit="return false;" novalidate>
+
+                <!-- ── Contact Info ─────────────────────────────────────── -->
+                <fieldset class="field-section">
+                    <legend class="field-section-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Contact Info
+                    </legend>
+
+                    <div class="field-grid">
+
+                        <div class="field-group">
+                            <label for="name">Full Name</label>
+                            <div class="input-wrap">
+                                <input type="text" id="name" placeholder="Jane Smith" autocomplete="name">
+                                <span id="name-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="name-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="email">Email</label>
+                            <div class="input-wrap">
+                                <input type="email" id="email" placeholder="jane@example.com" autocomplete="email">
+                                <span id="email-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="email-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="phone">Phone</label>
+                            <div class="input-wrap">
+                                <input type="text" id="phone" placeholder="+91 98765 43210" autocomplete="tel">
+                                <span id="phone-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="phone-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="location">Location</label>
+                            <div class="input-wrap">
+                                <input type="text" id="location" placeholder="New York, USA" autocomplete="address-level2">
+                                <span id="location-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="location-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="dob">Date of Birth</label>
+                            <div class="input-wrap">
+                                <input type="text" id="dob" placeholder="15 August 1992">
+                                <span id="dob-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="dob-error" class="field-error"></span>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <!-- ── Professional ─────────────────────────────────────── -->
+                <fieldset class="field-section">
+                    <legend class="field-section-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                        Professional
+                    </legend>
+
+                    <div class="field-grid">
+
+                        <div class="field-group">
+                            <label for="company">Company</label>
+                            <div class="input-wrap">
+                                <input type="text" id="company" placeholder="Stripe, Google…">
+                                <span id="company-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="company-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="university">University / College</label>
+                            <div class="input-wrap">
+                                <input type="text" id="university" placeholder="IIT Delhi, MIT…">
+                                <span id="university-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="university-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group field-group--full">
+                            <label for="linkedin">LinkedIn URL</label>
+                            <div class="input-wrap">
+                                <input type="url" id="linkedin" placeholder="https://linkedin.com/in/username">
+                                <span id="linkedin-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="linkedin-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group field-group--full">
+                            <label for="github">GitHub URL</label>
+                            <div class="input-wrap">
+                                <input type="url" id="github" placeholder="https://github.com/username">
+                                <span id="github-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="github-error" class="field-error"></span>
+                        </div>
+
+                        <div class="field-group field-group--full">
+                            <label for="skills">Skills <small>(comma-separated)</small></label>
+                            <div class="input-wrap">
+                                <input type="text" id="skills" placeholder="Python, React, AWS, Docker…">
+                                <span id="skills-confidence" class="confidence-badge" aria-hidden="true"></span>
+                            </div>
+                            <span id="skills-error" class="field-error"></span>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <div class="form-footer">
+                    <button type="button" class="btn btn--ghost" onclick="clearForm()">Clear</button>
+                    <button type="button" class="btn btn--primary" onclick="saveData()">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Save to Firebase
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
 </div>
 
 <script type="module" src="script.js"></script>
-
 </body>
 </html>
