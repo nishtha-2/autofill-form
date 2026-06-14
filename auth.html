@@ -43,7 +43,7 @@
     <main class="auth-form-panel">
 
         <!-- Theme toggle top-right -->
-        <button id="theme-toggle" class="theme-btn auth-theme-btn" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <button id="theme-toggle" class="theme-btn auth-theme-btn" aria-label="Toggle dark mode" >
             <span class="theme-icon theme-icon--light">☀</span>
             <span class="theme-icon theme-icon--dark">☽</span>
         </button>
@@ -58,7 +58,7 @@
                     role="tab"
                     aria-selected="true"
                     aria-controls="panel-login"
-                    onclick="switchTab('login')"
+                    
                 >Sign In</button>
                 <button
                     id="tab-signup"
@@ -66,7 +66,7 @@
                     role="tab"
                     aria-selected="false"
                     aria-controls="panel-signup"
-                    onclick="switchTab('signup')"
+                    
                 >Create Account</button>
             </div>
 
@@ -93,7 +93,7 @@
                             <button
                                 type="button"
                                 class="forgot-link"
-                                onclick="handleForgotPassword()"
+                                
                             >Forgot password?</button>
                         </label>
                         <div class="pw-wrap">
@@ -117,7 +117,7 @@
                 <button
                     id="login-btn"
                     class="btn btn--primary auth-submit-btn"
-                    onclick="handleLogin()"
+                    
                 >
                     <span class="btn-label">Sign In</span>
                     <span id="login-spinner" class="spinner" style="display:none;"></span>
@@ -127,7 +127,7 @@
 
                 <button
                     class="btn btn--google"
-                    onclick="handleGoogleSignIn()"
+                    
                 >
                     <svg viewBox="0 0 24 24" width="16" height="16">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -176,7 +176,7 @@
                                 placeholder="Min. 8 characters"
                                 autocomplete="new-password"
                             >
-                            <button type="button" class="pw-toggle" onclick="togglePassword('signup-password', this)" aria-label="Show password">
+                            <button type="button" class="pw-toggle"  aria-label="Show password">
                                 <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle cx="12" cy="12" r="3"/>
@@ -200,7 +200,7 @@
                                 placeholder="Repeat password"
                                 autocomplete="new-password"
                             >
-                            <button type="button" class="pw-toggle" onclick="togglePassword('signup-confirm', this)" aria-label="Show password">
+                            <button type="button" class="pw-toggle"  aria-label="Show password">
                                 <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle cx="12" cy="12" r="3"/>
@@ -224,7 +224,7 @@
 
                 <button
                     class="btn btn--google"
-                    onclick="handleGoogleSignIn()"
+                   
                 >
                     <svg viewBox="0 0 24 24" width="16" height="16">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

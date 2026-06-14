@@ -1,0 +1,348 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   popup.css — Extension popup only
+   Extends style.css. Chrome enforces popup max-width via the window itself;
+   we fix our own width to 380px for consistency across OS/DPI settings.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Reset popup chrome ──────────────────────────────────────────────────── */
+html, body {
+    width: 380px;
+    min-width: 380px;
+    max-width: 380px;
+    min-height: unset;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* ── Auth gate (shown when logged out) ───────────────────────────────────── */
+.auth-gate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 36px 24px;
+    min-height: 240px;
+    text-align: center;
+}
+
+.auth-gate .brand-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+
+.auth-gate .brand-icon {
+    width: 30px; height: 30px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.auth-gate .brand-icon svg { width: 16px; height: 16px; }
+
+.auth-gate-msg {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    margin-bottom: 4px;
+}
+
+.auth-gate .btn { width: 100%; padding: 10px; }
+
+/* ── Popup header ────────────────────────────────────────────────────────── */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.popup-header .header-brand { display: flex; align-items: center; gap: 7px; }
+
+.popup-header .brand-icon {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.popup-header .brand-icon svg { width: 13px; height: 13px; }
+
+.popup-header .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.header-actions { display: flex; align-items: center; gap: 4px; }
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    padding: 4px 6px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 0; width: auto;
+    transition: border-color 0.12s, color 0.12s;
+}
+
+.icon-btn:hover { border-color: var(--border-hover); color: var(--text); background: transparent; }
+
+/* ── Tab nav ─────────────────────────────────────────────────────────────── */
+.tab-nav {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel-alt);
+    padding: 0 10px;
+    gap: 2px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px 4px;
+    margin-top: 0; width: auto;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: color 0.12s, border-color 0.12s;
+}
+
+.tab-btn:hover { color: var(--text); background: transparent; }
+
+.tab-btn--active {
+    color: var(--accent) !important;
+    border-bottom-color: var(--accent) !important;
+    background: transparent !important;
+}
+
+/* ── Tab panels ──────────────────────────────────────────────────────────── */
+.tab-panel { padding: 14px; }
+
+/* ── User pill ───────────────────────────────────────────────────────────── */
+.user-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.user-pill .user-avatar {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0;
+}
+
+[data-theme="dark"] .user-pill .user-avatar { color: #1e0e0e; }
+
+.user-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+}
+
+/* ── Section label ───────────────────────────────────────────────────────── */
+.section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+/* ── Textarea in popup ───────────────────────────────────────────────────── */
+#userText {
+    min-height: 120px;
+    font-size: 0.84rem;
+    padding: 9px 11px;
+    line-height: 1.65;
+}
+
+/* ── Fill target indicator ───────────────────────────────────────────────── */
+.fill-target {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+/* ── Action row ──────────────────────────────────────────────────────────── */
+.action-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.action-row .btn { flex: 1; padding: 9px 12px; font-size: 0.86rem; }
+
+/* ── Fill result ─────────────────────────────────────────────────────────── */
+.fill-result {
+    margin-top: 10px;
+    padding: 9px 11px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.result-ok   { color: #6b4e00; font-weight: 600; }
+.result-warn { color: var(--text-muted); }
+.result-fields {
+    color: var(--text-dim);
+    font-size: 0.74rem;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.01em;
+}
+
+/* ── History list ────────────────────────────────────────────────────────── */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-empty {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.history-card {
+    padding: 9px 11px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+}
+
+.history-card:hover { border-color: var(--border-hover); background: var(--panel-alt); }
+
+.hc-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+.hc-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.hc-time { color: var(--text-dim); }
+
+.hc-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 7px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* ── Preview fields ──────────────────────────────────────────────────────── */
+.preview-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.pv-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 5px 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.pv-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    width: 74px;
+}
+
+.pv-value {
+    flex: 1;
+    color: var(--text);
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.pv-error {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--danger);
+    font-weight: 400;
+}
+
+/* ── Notification in popup (overrides style.css fixed position) ──────────── */
+#notification-banner {
+    position: relative;
+    top: unset; left: unset;
+    transform: none;
+    width: 100%;
+    border-radius: 0;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    box-shadow: none;
+    text-align: center;
+}

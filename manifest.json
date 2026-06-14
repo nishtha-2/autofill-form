@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "AutoFillAI",
+  "version": "1.0.0",
+  "description": "Paste any bio or resume text and instantly autofill forms on any website.",
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AutoFillAI",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "identity"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "auth.html", "*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "oauth2": {
+    "client_id": "459461217144-j8m496eqs1v0gvsbh5qmuug87c35k3pe.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  }
+}
