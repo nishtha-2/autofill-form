@@ -224,7 +224,7 @@ async function extractData() {
     if (spinner) spinner.style.display = "inline-block";
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/extract", {
+        const response = await fetch("http://127.0.0.1:5001/extract", {
             method:  "POST",
             headers: { "Content-Type": "application/json" },
             body:    JSON.stringify({ text }),

@@ -1,12 +1,30 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import spacy
+import os
 import re
+
+import spacy
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-nlp = spacy.load("en_core_web_sm")
+
+def get_server_port():
+    """Return the configured port, defaulting to 5001 to avoid macOS conflicts."""
+    raw_port = os.getenv("PORT", "5001")
+    try:
+        port = int(raw_port)
+    except (TypeError, ValueError):
+        return 5001
+    return port if port > 0 else 5001
+
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    # Fallback if the language model is not installed.
+    # This avoids a hard crash and keeps the API operational.
+    print("[AutoFillAI] en_core_web_sm model not found. Falling back to blank English model.")
+    nlp = spacy.blank("en")
 
 # ---------------------------------------------------------------------------
 # Validation helpers
@@ -47,7 +65,7 @@ def extract_email(text):
 
 
 def extract_phone(text):
-    """
+    r"""
     Improved patterns (over the original \b\d{10}\b):
     - International: +1-800-555-0100, +44 20 7946 0958
     - Local formatted: (555) 867-5309, 555.867.5309
@@ -297,4 +315,4 @@ def extract():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=get_server_port(), debug=True, use_reloader=False)
