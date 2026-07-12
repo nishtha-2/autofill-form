@@ -41,4 +41,5 @@ npm install
 - Sign in / sign up opens `auth.html` for Firebase authentication.
 - Firebase is initialized with the app configuration already present in the source.
 - If you want to use your own Firebase project, replace the `firebaseConfig` object in `popup.js` and `auth.js`.
+- This project is ready to be loaded as an unpacked Chrome extension after the backend is running.
 
